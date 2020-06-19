@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.fy.cjgl.dao.PermissionDao">
+    <insert id="addPermission" parameterType="Permission">
+        INSERT INTO t_sys_permission(menuid, permissionname, permissiontag)
+        VALUES(#{menuid}, #{permissionname}, #{permissiontag})
+    </insert>
+
+    <update id="modPermission" parameterType="Permission">
+        UPDATE t_sys_permission
+        SET menuid = #{menuid},
+            permissionname = #{permissionname},
+            permissiontag = #{permissiontag}
+        WHERE permissionid = #{permissionid}
+    </update>
+    
+    <delete id="delPermission" parameterType="Permission">
+        DELETE FROM t_sys_permission
+        WHERE permissionid = #{permissionid}
+    </delete>
+    
+    <select id="queryPermission" parameterType="Permission" resultType="Permission">
+        SELECT * FROM t_sys_permission
+        WHERE permissionid = #{permissionid}
+    </select>
+    
+    <select id="queryPermissionList" parameterType="Permission" resultType="Permission">
+        SELECT * FROM t_sys_permission t
+        <where>
+            <if test="permissiontag!=null and permissiontag!=''">
+                t.permissiontag LIKE CONCAT('%', #{permissiontag}, '%')
+            </if>
+            <if test="menuid!=null and menuid!=''">
+                AND t.menuid = #{menuid}
+            </if>
+        </where>
+    </select>
+    
+    <select id="checkPermission" parameterType="Permission" resultType="int">
+        SELECT COUNT(t.permissionid) FROM t_sys_permission  t
+        <where>
+            <if test="permissionid!=null">
+                t.permissionid != #{permissionid}
+            </if>
+            <if test="menuid!=null and menuid!=''">
+                AND t.menuid = #{menuid}
+            </if>
+            <if test="permissiontag!=null and permissiontag!=''">
+                AND t.permissiontag = #{permissiontag}
+            </if>
+        </where>
+    </select>
+
+</mapper>

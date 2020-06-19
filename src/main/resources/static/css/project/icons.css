@@ -1,0 +1,213 @@
+.icon-cjgl{
+    background:url('icons/cjgl.jpg') no-repeat center center;
+}
+
+.icon-house{
+    background:url('icons/house.png') no-repeat center center;
+}
+
+.icon-gear{
+    background:url('icons/gear.png') no-repeat center center;
+}
+
+/*application*/
+.icon-application{
+    background:url('icons/application.png') no-repeat center center;
+}
+
+.icon-applicationadd{
+    background:url('icons/application_add.png') no-repeat center center;
+}
+
+.icon-applicationdelete{
+    background:url('icons/application_delete.png') no-repeat center center;
+}
+
+.icon-applicationedit{
+    background:url('icons/application_edit.png') no-repeat center center;
+}
+
+.icon-applicationlink{
+    background:url('icons/application_link.png') no-repeat center center;
+}
+
+.icon-applicationsidetree{
+    background:url('icons/application_side_tree.png') no-repeat center center;
+}
+
+.icon-applicationtree{
+    background:url('icons/application-tree.png') no-repeat center center;
+}
+
+/*book*/
+.icon-book{
+    background:url('icons/book.png') no-repeat center center;
+}
+
+.icon-bookadd{
+    background:url('icons/book_add.png') no-repeat center center;
+}
+
+.icon-bookdelete{
+    background:url('icons/book_delete.png') no-repeat center center;
+}
+
+.icon-bookedit{
+    background:url('icons/book_edit.png') no-repeat center center;
+}
+
+.icon-booklink{
+    background:url('icons/book_link.png') no-repeat center center;
+}
+
+/*cross-circle-frame*/
+.icon-crosscircleframe{
+    background:url('icons/cross-circle-frame.png') no-repeat center center;
+}
+
+/*document*/
+.icon-documentexcel{
+    background:url('icons/document-excel.png') no-repeat center center;
+}
+
+/*folder*/
+.icon-folder{
+    background:url('icons/folder.png') no-repeat center center;
+}
+
+.icon-folderadd{
+    background:url('icons/folder_add.png') no-repeat center center;
+}
+
+.icon-folderdelete{
+    background:url('icons/folder_delete.png') no-repeat center center;
+}
+
+.icon-folderedit{
+    background:url('icons/folder_edit.png') no-repeat center center;
+}
+
+/*group*/
+.icon-group{
+    background:url('icons/group.png') no-repeat center center;
+}
+
+.icon-groupadd{
+    background:url('icons/group_add.png') no-repeat center center;
+}
+
+.icon-groupdelete{
+    background:url('icons/group_delete.png') no-repeat center center;
+}
+
+.icon-groupedit{
+    background:url('icons/group_edit.png') no-repeat center center;
+}
+
+.icon-grouplink{
+    background:url('icons/group_link.png') no-repeat center center;
+}
+
+/*layout*/
+.icon-layout{
+    background:url('icons/layout.png') no-repeat center center;
+}
+
+.icon-layoutadd{
+    background:url('icons/layout_add.png') no-repeat center center;
+}
+
+.icon-layoutdelete{
+    background:url('icons/layout_delete.png') no-repeat center center;
+}
+
+.icon-layoutedit{
+    background:url('icons/layout_edit.png') no-repeat center center;
+}
+
+.icon-layoutlightning{
+    background:url('icons/layout_lightning.png') no-repeat center center;
+}
+
+.icon-layoutlink{
+    background:url('icons/layout_link.png') no-repeat center center;
+}
+
+/*lock*/
+.icon-lock{
+    background:url('icons/lock.png') no-repeat center center;
+}
+
+.icon-lockadd{
+    background:url('icons/lock_add.png') no-repeat center center;
+}
+.icon-lockdelete{
+    background:url('icons/lock_delete.png') no-repeat center center;
+}
+
+.icon-lockedit{
+    background:url('icons/lock_edit.png') no-repeat center center;
+}
+
+.icon-lockkey{
+    background:url('icons/lock_key.png') no-repeat center center;
+}
+
+/*map*/
+.icon-map{
+    background:url('icons/map.png') no-repeat center center;
+}
+
+.icon-mapadd{
+    background:url('icons/map_add.png') no-repeat center center;
+}
+
+.icon-mapdelete{
+    background:url('icons/map_delete.png') no-repeat center center;
+}
+
+.icon-mapedit{
+    background:url('icons/map_edit.png') no-repeat center center;
+}
+
+.icon-maplink{
+    background:url('icons/map_link.png') no-repeat center center;
+}
+
+/*user*/
+.icon-user{
+	background:url('icons/user.png') no-repeat center center;
+}
+
+.icon-useradd{
+    background:url('icons/user_add.png') no-repeat center center;
+}
+
+.icon-userdelete{
+    background:url('icons/user_delete.png') no-repeat center center;
+}
+
+.icon-useredit{
+    background:url('icons/user_edit.png') no-repeat center center;
+}
+
+/*role*/
+.icon-role{
+    background:url('icons/group.png') no-repeat center center;
+}
+
+.icon-roleadd{
+    background:url('icons/group_add.png') no-repeat center center;
+}
+
+.icon-roledelete{
+    background:url('icons/group_delete.png') no-repeat center center;
+}
+
+.icon-roleedit{
+    background:url('icons/group_edit.png') no-repeat center center;
+}
+
+.icon-rolelink{
+    background:url('icons/group_link.png') no-repeat center center;
+}

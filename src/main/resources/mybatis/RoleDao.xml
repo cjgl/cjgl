@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.fy.cjgl.dao.RoleDao">
+    <insert id="addRole" parameterType="Role">
+        INSERT INTO t_sys_role(projectid, subsystemid, rolename, remark,
+            createtime, updatetime, delflag)
+        VALUES(#{projectid}, #{subsystemid}, #{rolename}, #{remark},
+            #{createtime}, #{updatetime}, #{delflag})
+    </insert>
+
+    <update id="modRole" parameterType="Role">
+        UPDATE t_sys_role
+        SET projectid = #{projectid},
+            subsystemid = #{subsystemid},
+            rolename = #{rolename},
+            remark = #{remark},
+            updatetime = #{updatetime}
+        WHERE roleid = #{roleid}
+    </update>
+    
+    <delete id="delRole" parameterType="Role">
+        DELETE FROM t_sys_role
+        WHERE roleid = #{roleid}
+    </delete>
+    
+    <select id="queryRole" parameterType="Role" resultType="Role">
+        SELECT * FROM t_sys_role
+        WHERE roleid = #{roleid}
+    </select>
+    
+    <select id="queryRoleList" parameterType="Role" resultType="Role">
+        SELECT t.*, t1.projectname, t2.subsystemname
+        FROM t_sys_role t
+            LEFT JOIN t_sys_project t1 ON t.projectid = t1.projectid
+            LEFT JOIN t_sys_subsystem t2 ON t.subsystemid = t2.subsystemid
+        <where>
+            <if test="projectid!=null">
+                t.projectid = #{projectid}
+            </if>
+            <if test="subsystemid!=null">
+                AND t.subsystemid = #{subsystemid}
+            </if>
+            <if test="rolename!=null and rolename!=''">
+                AND t.rolename LIKE CONCAT('%', #{rolename}, '%')
+            </if>
+            <if test="delflag!=null and delflag!=''">
+                AND t.delflag = #{delflag}
+            </if>
+        </where>
+    </select>
+    
+    <select id="checkRole" parameterType="Role" resultType="int">
+        SELECT COUNT(t.roleid) FROM t_sys_role t
+        <where>
+            <if test='roleid!=null'>
+                t.roleid != #{roleid}
+            </if>
+            <if test='subsystemid!=null'>
+                AND t.subsystemid = #{subsystemid}
+            </if>
+            <if test='rolename!=null and rolename!=""'>
+                AND t.rolename = #{rolename}
+            </if>
+            <if test='delflag!=null and delflag!=""'>
+                AND t.delflag = #{delflag}
+            </if>
+        </where>
+    </select>
+
+</mapper>

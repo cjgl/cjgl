@@ -1,0 +1,42 @@
+<meta charset="UTF-8">
+<title>长铗管理系统</title>
+<link rel="icon" type="image/x-icon" href="${springMacroRequestContext.contextPath}/img/favicon.ico">
+<link rel="stylesheet" type="text/css" href="${springMacroRequestContext.contextPath}/css/jquery-easyui-1.6.10/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="${springMacroRequestContext.contextPath}/css/jquery-easyui-1.6.10/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="${springMacroRequestContext.contextPath}/css/jquery-easyui-1.6.10/themes/color.css">
+<link rel="stylesheet" type="text/css" href="${springMacroRequestContext.contextPath}/css/project/icons.css">
+<link rel="stylesheet" type="text/css" href="${springMacroRequestContext.contextPath}/css/project/project.css">
+     
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery-easyui-1.6.10/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${springMacroRequestContext.contextPath}/js/jquery-easyui-1.6.10/locale/easyui-lang-zh_CN.js"></script></head>
+
+<script type="text/javascript">
+$.ajaxSetup({
+    error : function(XMLHttpRequest, textStatus, errorThrown) {
+        if(XMLHttpRequest.status == 403){
+            //alert('您没有权限访问此资源');
+            $.messager.alert({
+                title: '提示',
+                msg: "您没有权限访问此资源"
+            });
+            return false;
+        }
+    },
+    complete : function(XMLHttpRequest, textStatus) {
+    	var statusText = XMLHttpRequest.statusText;
+        if(statusText == "parsererror"){
+            var top = getTopWindow();
+            top.location.href = "index";
+        }
+    }
+}); 
+
+function getTopWindow() {
+    var p = window;
+    while (p != p.parent) {
+        p = p.parent;
+    }
+    return p;
+}
+</script>

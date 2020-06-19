@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.fy.cjgl.dao.MenuDao" >
+	<insert id="addMenu" parameterType="Menu">
+		INSERT INTO t_sys_menu(subsystemid, pmenuid, menuname,
+            menuurl, iconcls, seqno)
+		VALUES(#{subsystemid}, #{pmenuid}, #{menuname},
+            #{menuurl}, #{iconcls}, #{seqno})
+	</insert>
+
+	<update id="modMenu" parameterType="Menu">
+		UPDATE t_sys_menu
+		SET menuname = #{menuname},
+            menuurl = #{menuurl},
+            iconcls = #{iconcls},
+            seqno = #{seqno}
+		WHERE menuid = #{menuid}
+	</update>
+	
+	<delete id="delMenu" parameterType="Menu">
+		DELETE FROM t_sys_menu
+		WHERE menuid = #{menuid}
+	</delete>
+	
+	<select id="queryMenu" parameterType="Menu" resultType="Menu">
+		SELECT * FROM t_sys_menu
+		WHERE menuid = #{menuid}
+	</select>
+	
+	<select id="queryMenuList" parameterType="Menu" resultType="Menu">
+        SELECT t.*
+        FROM t_sys_menu t
+        <where>   
+            <if test="subsystemid!=null">
+                AND t.subsystemid = #{subsystemid}
+            </if>
+            <if test="pmenuid!=null">
+                AND t.pmenuid = #{pmenuid}
+            </if>
+            <if test="menuname!=null">
+                AND t.menuname = #{menuname}
+            </if>
+        </where>
+    </select>
+	
+	<select id="checkMenu" parameterType="Menu" resultType="int">
+        SELECT COUNT(t.menuid) FROM t_sys_menu t
+        <where>
+            <if test='menuid!=null'>
+                t.menuid != #{menuid}
+            </if>
+            <if test="subsystemid!=null">
+                AND t.subsystemid = #{subsystemid}
+            </if>
+            <if test="pmenuid!=null">
+                AND t.pmenuid = #{pmenuid}
+            </if>
+            <if test="menuname!=null">
+                AND t.menuname = #{menuname}
+            </if>
+        </where>
+    </select>
+
+</mapper>

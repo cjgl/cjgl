@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <#include "/INC_HEAD.HTML">
+    </head>
+    
+    <body>
+		<div class="easyui-layout" data-options="fit:true">
+			<div data-options="region:'north'" style="height:50px;padding:10px;">
+                <input id="q_projectname" name="q_projectname" class="easyui-textbox" label="项目名称:" style="width:260px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" onclick="query();">查询</a>
+			</div>
+			<div data-options="region:'center'">
+				 <table id="dg" class="easyui-datagrid" style="height:100%;width:100%;"
+		                url="queryProjectList"
+		                toolbar="#toolbar" fit="true"
+		                frozenColumns=[[]]
+		                rownumbers="true" fitColumns="false" singleSelect="true"
+		                striped="true" loadMsg="数据加载中，请等待..." emptyMsg="暂无数据"
+		                pageSize="20" pagination="true"
+		                pageList="[10,20]">
+		            <thead>
+		                <tr>
+		                    <th field="projectname" width="200">项目名称</th>
+		                    <th field="remark" width="300">备注</th>
+		                    <th field="createtime" width="130">创建时间</th>
+		                    <th field="updatetime" width="130">修改时间</th>
+		                </tr>
+		            </thead>
+		        </table>
+		        <div id="toolbar">
+		            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-applicationadd" plain="true" onclick="add();">新增</a>
+		            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-applicationedit" plain="true" onclick="mod();">修改</a>
+		            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-applicationdelete" plain="true" onclick="del();">删除</a>
+		        </div>
+			</div>
+		</div>
+        
+        
+        <div id="dlg" class="easyui-dialog" style="width:500px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+            <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px;">
+                <h3>项目信息</h3>
+                <div style="margin-bottom:10px">
+                    <input name="projectname" class="easyui-textbox" required="true" label="项目名称:" style="width:100%;" data-options="validType:'length[1,50]'">
+                </div>
+                <div style="margin-bottom:10px">
+                    <input name="remark" class="easyui-textbox" label="备注:" style="width:100%;height:60px;" data-options="multiline:true,validType:'length[0,200]'">
+                </div>
+            </form>
+        </div>
+        <div id="dlg-buttons">
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save();" style="width:90px">保存</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close');" style="width:90px">取消</a>
+        </div>
+        
+    </body>
+    
+<script type="text/javascript">
+function query(){
+    $('#dg').datagrid('load', {
+    	projectname : $('#q_projectname').val()
+    });
+}
+
+var url;
+function add(){
+    $('#dlg').dialog('open').dialog('center').dialog('setTitle','新增');
+    $('#fm').form('clear');
+    url = 'addProject';
+}
+
+function mod(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','修改');
+        $('#fm').form('load',row);
+        url = 'modProject?projectid='+row.projectid;
+    } else {
+    	$.messager.alert({
+            title: '提示',
+            msg: "请选择一行"
+        });
+    }
+}
+
+function save(){
+    $('#fm').form('submit',{
+        url: url,
+        dataType:"json",
+        onSubmit: function(){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result = eval('('+result+')');
+            if (result.nResult=="0"){
+                $('#dlg').dialog('close');        // close the dialog
+                $('#dg').datagrid('reload', {
+                    projectname : $('#q_projectname').val()
+                });    // reload the user data
+            } else {
+                $.messager.alert({
+                    title: '提示',
+                    msg: result.msg
+                });
+            }
+        }
+    });
+}
+
+function del(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row){
+        $.messager.confirm('确认','请确认删除',function(r){
+            if (r){
+                $.post('delProject',{projectid:row.projectid},function(result){
+                    if (result.nResult=="0"){
+                        $('#dg').datagrid('reload');    // reload the user data
+                    } else {
+                        $.messager.alert({    // show error message
+                            title: '提示',
+                            msg: result.msg
+                        });
+                    }
+                },'json');
+            }
+        });
+    } else {
+        $.messager.alert({
+            title: '提示',
+            msg: "请选择一行"
+        });
+    }
+}
+</script>
+
+</html>

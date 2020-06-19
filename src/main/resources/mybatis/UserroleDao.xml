@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.fy.cjgl.dao.UserroleDao">
+    <insert id="addUserrole" parameterType="Userrole">
+        INSERT INTO t_sys_userrole(userid, roleid)
+        VALUES(#{userid}, #{roleid})
+    </insert>
+
+    <update id="modUserrole" parameterType="Userrole">
+        UPDATE t_sys_userrole
+        SET userid = #{userid},
+            roleid = #{roleid}
+        WHERE userroleid = #{userroleid}
+    </update>
+    
+    <delete id="delUserrole" parameterType="Userrole">
+        DELETE FROM t_sys_userrole
+        WHERE userroleid = #{userroleid}
+    </delete>
+    
+    <delete id="delUserroleByUserid" parameterType="Userrole">
+        DELETE FROM t_sys_userrole
+        WHERE userid = #{userid}
+    </delete>
+    
+    <select id="queryUserrole" parameterType="Userrole" resultType="Userrole">
+        SELECT * FROM t_sys_userrole
+        WHERE userroleid = #{userroleid}
+    </select>
+    
+    <select id="queryUserroleList" parameterType="Userrole" resultType="Userrole">
+        SELECT t.*, t1.userroleid, t1.userid
+        FROM t_sys_role t
+            LEFT JOIN (
+            SELECT * FROM t_sys_userrole
+            <where>
+	            <if test="userid!=null">
+	                AND userid = #{userid}
+	            </if>
+            </where>
+            ) t1 ON t.roleid = t1.roleid
+        <where>
+            <if test="subsystemid!=null">
+                AND t.subsystemid = #{subsystemid}
+            </if>
+            <if test="delflag!=null and delflag!=''">
+                AND t.delflag = #{delflag}
+            </if>
+        </where>
+    </select>
+    
+    <select id="queryUserroleListByUserid" parameterType="Userrole" resultType="Userrole">
+        SELECT t.*, t1.userroleid, t1.userid
+        FROM t_sys_userrole t1
+            INNER JOIN t_sys_role t ON t.roleid = t1.roleid
+        <where>
+            <if test="userid!=null">
+                AND userid = #{userid}
+            </if>
+            <if test="delflag!=null and delflag!=''">
+                AND t.delflag = #{delflag}
+            </if>
+        </where>
+    </select>
+
+</mapper>

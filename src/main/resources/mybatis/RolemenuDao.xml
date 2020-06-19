@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.fy.cjgl.dao.RolemenuDao">
+    <insert id="addRolemenu" parameterType="Rolemenu">
+        INSERT INTO t_sys_rolemenu(roleid, menuid)
+        VALUES(#{roleid}, #{menuid})
+    </insert>
+
+    <update id="modRolemenu" parameterType="Rolemenu">
+        UPDATE t_sys_rolemenu
+        SET roleid = #{roleid},
+            menuid = #{menuid}
+        WHERE rolemenuid = #{rolemenuid}
+    </update>
+    
+    <delete id="delRolemenu" parameterType="Rolemenu">
+        DELETE FROM t_sys_rolemenu
+        WHERE rolemenuid = #{rolemenuid}
+    </delete>
+    
+    <delete id="delRolemenuByRoleid" parameterType="Rolemenu">
+        DELETE FROM t_sys_rolemenu
+        WHERE roleid = #{roleid}
+    </delete>
+    
+    <select id="queryRolemenu" parameterType="Rolemenu" resultType="Rolemenu">
+        SELECT * FROM t_sys_rolemenu
+        WHERE rolemenuid = #{rolemenuid}
+    </select>
+    
+    <select id="queryRolemenuList" parameterType="Rolemenu" resultType="Rolemenu">
+        SELECT t.*, t1.rolemenuid, t1.roleid
+        FROM t_sys_menu t
+            LEFT JOIN (
+            SELECT * FROM t_sys_rolemenu
+            <where>
+                <if test="roleid!=null">
+                    AND roleid = #{roleid}
+                </if>
+            </where>
+            ) t1 ON t.menuid = t1.menuid
+        <where>
+            <if test="subsystemid!=null">
+                AND t.subsystemid = #{subsystemid}
+            </if>
+            <if test="pmenuid!=null">
+                AND t.pmenuid = #{pmenuid}
+            </if>
+        </where>
+    </select>
+    
+    <select id="queryRolemenuListByRoleids" parameterType="Rolemenu" resultType="Rolemenu">
+        SELECT t.*, t1.rolemenuid, t1.roleid
+        FROM t_sys_menu t
+            LEFT JOIN t_sys_rolemenu t1 ON t.menuid = t1.menuid
+        <where>
+            <if test="roleidList!=null">
+                AND t1.roleid IN
+                <foreach collection="roleidList" item="param" separator="," open="(" close=")">
+                   #{param}
+                </foreach>
+            </if>
+            <if test="pmenuid!=null">
+                AND t.pmenuid = #{pmenuid}
+            </if>
+        </where>
+    </select>
+
+</mapper>

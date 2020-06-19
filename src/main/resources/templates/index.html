@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <#include "/INC_HEAD.HTML">
+    </head>
+    
+    <body>
+        <div id="w" class="easyui-window" title="请登录" data-options="modal:true,iconCls:'icon-lockkey',collapsible:false,minimizable:false,maximizable:false,closable:false" style="width:400px;padding:20px 70px 20px 70px;">
+            <form id="fm" method="post" novalidate>
+            <div style="margin-bottom:20px">
+                <input class="easyui-textbox" id="loginname" name="loginname" required="true" style="width:100%;height:30px;padding:12px" data-options="prompt:'用户名',iconCls:'icon-man',iconWidth:38">
+            </div>
+            <div style="margin-bottom:20px">
+                <input class="easyui-textbox" id="pwd" name="pwd" required="true" type="password" style="width:100%;height:30px;padding:12px" data-options="prompt:'密码',iconCls:'icon-lock',iconWidth:38">
+            </div>
+            <div style="margin-bottom:20px">
+                <a href="javascript:void(0);" onclick="changeValidateCode();"><img id="validateCode" style=" margin:0 0 0 3px;vertical-align:middle;height:26px;" src="validateCode"></a>
+                <input class="easyui-textbox" id="validateCode" name="validateCode" required="true" type="text" style="width:50%;height:30px;padding:12px" data-options="prompt:'验证码',validType:'length[4,4]'">
+            </div>
+            <div>
+                <a href="javascript:;" onclick="dologin()" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:100%;">
+                    <span style="font-size:14px;">登录</span>
+                </a>
+            </div>
+            </form>
+        </div>
+
+    </body>
+    
+<script type="text/javascript">
+$(function(){
+    
+});
+
+function changeValidateCode(){
+	$("#validateCode").attr("src", "validateCode?new="+Math.random(0,10));
+}
+
+function dologin(){
+	$('#fm').form('submit',{
+        url: "login",
+        dataType:"json",
+        onSubmit: function(){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result = eval('('+result+')');
+            if (result.resultCode=="0"){
+            	window.location.href="main";
+            } else {
+                $.messager.alert({
+                    title: '提示',
+                    msg: result.resultMsg
+                });
+                if (result.resultCode=="-1"){
+                	changeValidateCode();
+                }
+            }
+        }
+    });
+}
+</script>
+
+</html>

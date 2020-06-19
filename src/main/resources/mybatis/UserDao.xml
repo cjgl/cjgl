@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.fy.cjgl.dao.UserDao" >
+	<insert id="addUser" parameterType="User">
+		INSERT INTO t_sys_user(projectid, subsystemid, loginname, username,
+            pwd, sso, createtime, updatetime, delflag)
+		VALUES(#{projectid}, #{subsystemid}, #{loginname}, #{username},
+            #{pwd}, #{sso}, #{createtime}, #{updatetime}, #{delflag})
+	</insert>
+
+	<update id="modUser" parameterType="User">
+		UPDATE t_sys_user
+		SET projectid = #{projectid},
+            subsystemid = #{subsystemid},
+            loginname = #{loginname},
+            username = #{username},
+            pwd = #{pwd},
+            sso = #{sso},
+            updatetime = #{updatetime}
+		WHERE userid = #{userid}
+	</update>
+	
+	<delete id="delUser" parameterType="User">
+		DELETE FROM t_sys_user
+		WHERE userid = #{userid}
+	</delete>
+	
+	<select id="queryUser" parameterType="User" resultType="User">
+		SELECT * FROM t_sys_user
+		WHERE userid = #{userid}
+	</select>
+	
+	<select id="queryUserList" parameterType="User" resultType="User">
+        SELECT t.*, t1.projectname, t2.subsystemname
+        FROM t_sys_user t
+        LEFT JOIN t_sys_project t1 ON t.projectid = t1.projectid
+            LEFT JOIN t_sys_subsystem t2 ON t.subsystemid = t2.subsystemid
+        <where>
+            <if test="projectid!=null">
+                t.projectid = #{projectid}
+            </if>
+            <if test="subsystemid!=null">
+                AND t.subsystemid = #{subsystemid}
+            </if>
+            <if test="loginname!=null and loginname!=''">
+                AND t.loginname LIKE CONCAT('%', #{loginname}, '%')
+            </if>
+            <if test="username!=null and username!=''">
+                AND t.username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="delflag!=null and delflag!=''">
+                AND t.delflag = #{delflag}
+            </if>
+        </where>
+    </select>
+	
+	<select id="checkUser" parameterType="User" resultType="int">
+        SELECT COUNT(t.userid) FROM t_sys_user t
+        <where>
+            <if test='userid!=null'>
+                t.userid != #{userid}
+            </if>
+            <if test='loginname!=null and loginname!=""'>
+                AND t.loginname = #{loginname}
+            </if>
+            <if test='delflag!=null and delflag!=""'>
+                AND t.delflag = #{delflag}
+            </if>
+        </where>
+    </select>
+    
+    <select id="getUserByLoginname" parameterType="User" resultType="User">
+        SELECT * FROM t_sys_user t
+        WHERE t.loginname = #{loginname} AND t.delflag = 0
+    </select>
+
+</mapper>

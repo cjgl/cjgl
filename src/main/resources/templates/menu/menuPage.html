@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <#include "/INC_HEAD.HTML">
+    </head>
+    
+    <body>
+        <div id="toolbar" style="width:100%;padding:5px">
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-layoutlightning" plain="true" onclick="query();">刷新</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-layoutadd" plain="true" onclick="add();">新增</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-layoutedit" plain="true" onclick="mod();">修改</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-layoutdelete" plain="true" onclick="del();">删除</a>  
+        </div>
+		<div class="easyui-panel" style="width:100%;height:300px;padding:5px">
+		    <ul id="allMenutree" class="easyui-tree"></ul>
+		</div>
+        
+        <div id="dlg" class="easyui-dialog" style="width:500px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+            <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px;">
+                <h3>菜单信息</h3>
+                <div style="margin-bottom:10px">
+                    <input name="menuname" class="easyui-textbox" required="true" label="菜单名称:" style="width:100%;" data-options="validType:'length[1,50]'">
+                </div>
+                <div style="margin-bottom:10px">
+                    <input name="menuurl" class="easyui-textbox" label="菜单URL:" style="width:100%;height:60px;" data-options="multiline:true,validType:'length[0,500]'">
+                </div>
+                <div style="margin-bottom:10px">
+                    <input name="seqno" class="easyui-numberbox" required="true" label="排序号:" style="width:100%;" data-options="min:1,max:999999">
+                </div>
+            </form>
+        </div>
+        <div id="dlg-buttons">
+            <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save();" style="width:90px">保存</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close');" style="width:90px">取消</a>
+        </div>
+        
+    </body>
+    
+<script type="text/javascript">
+$(function(){
+	$("#allMenutree").tree({
+		url : "queryAllMenu"
+	});
+});
+
+function query(){
+	$("#allMenutree").tree('reload');
+}
+
+var url;
+function add(){
+	var node = $("#allMenutree").tree("getSelected");
+	if(node){
+		if(node.id.substr(0,1) != "p"){
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','新增');
+		    $('#fm').form('clear');
+		    
+		    var pmenuid = "";
+		    if(node.id.substr(0,1) == "s"){
+		    	pmenuid = node.id.substr(1);
+		    } else {
+		    	pmenuid = node.id;
+		    }
+		    url = 'addMenu?subsystemid='+node.attributes.subsystemid+"&pmenuid="+pmenuid;
+		} else {
+			$.messager.alert({
+	            title: '提示',
+	            msg: "请选择子系统或菜单"
+	        });
+	        return;
+		}
+	} else {
+		$.messager.alert({
+            title: '提示',
+            msg: "请选择子系统或菜单"
+        });
+		return;
+	}
+}
+
+function mod(){
+	var node = $("#allMenutree").tree("getSelected");
+    if(node){
+        if(node.id.substr(0,1) != "p" && node.id.substr(0,1) != "s"){
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle','修改');
+            $('#fm').form('load', {
+            	menuname : node.text,
+            	menuurl : node.attributes.menuurl,
+            	seqno : node.attributes.seqno
+            });
+            
+            url = 'modMenu?menuid='+node.id+"&subsystemid="+node.attributes.subsystemid+"&pmenuid="+node.pId;
+        } else {
+            $.messager.alert({
+                title: '提示',
+                msg: "请选择菜单"
+            });
+            return;
+        }
+    } else {
+        $.messager.alert({
+            title: '提示',
+            msg: "请选择菜单"
+        });
+        return;
+    }
+}
+
+function save(){
+    $('#fm').form('submit',{
+        url: url,
+        dataType:"json",
+        onSubmit: function(){
+            return $(this).form('validate');
+        },
+        success: function(result){
+            var result = eval('('+result+')');
+            if (result.nResult=="0"){
+                $('#dlg').dialog('close');
+                $("#allMenutree").tree('reload');
+            } else {
+                $.messager.alert({
+                    title: '提示',
+                    msg: result.msg
+                });
+            }
+        }
+    });
+}
+
+function del(){
+	var node = $("#allMenutree").tree("getSelected");
+    if(node){
+        if(node.id.substr(0,1) != "p" && node.id.substr(0,1) != "s"){
+        	$.messager.confirm('确认','请确认删除',function(r){
+                if (r){
+                    $.post('delMenu', {menuid:node.id}, function(result){
+                        if (result.nResult=="0"){
+                        	$("#allMenutree").tree('reload');
+                        } else {
+                            $.messager.alert({
+                                title: '提示',
+                                msg: result.msg
+                            });
+                        }
+                    },'json');
+                }
+            });
+        } else {
+            $.messager.alert({
+                title: '提示',
+                msg: "请选择菜单"
+            });
+            return;
+        }
+    } else {
+        $.messager.alert({
+            title: '提示',
+            msg: "请选择菜单"
+        });
+        return;
+    }
+}
+
+</script>
+
+</html>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.fy.cjgl.dao.SubSystemDao">
+    <insert id="addSubSystem" parameterType="SubSystem">
+        INSERT INTO t_sys_subsystem(projectid, subsystemname, type,
+            remark, createtime, updatetime, delflag)
+        VALUES(#{projectid}, #{subsystemname}, #{type},
+            #{remark}, #{createtime}, #{updatetime}, #{delflag})
+    </insert>
+
+    <update id="modSubSystem" parameterType="SubSystem">
+        UPDATE t_sys_subsystem
+        SET projectid = #{projectid},
+            subsystemname = #{subsystemname},
+            type = #{type},
+            remark = #{remark},
+            updatetime = #{updatetime}
+        WHERE subsystemid = #{subsystemid}
+    </update>
+    
+    <delete id="delSubSystem" parameterType="SubSystem">
+        DELETE FROM t_sys_subsystem
+        WHERE subsystemid = #{subsystemid}
+    </delete>
+    
+    <select id="querySubSystem" parameterType="SubSystem" resultType="SubSystem">
+        SELECT * FROM t_sys_subsystem
+        WHERE subsystemid = #{subsystemid}
+    </select>
+    
+    <select id="querySubSystemList" parameterType="SubSystem" resultType="SubSystem">
+        SELECT t.*, t1.projectname
+        FROM t_sys_subsystem t
+            LEFT JOIN t_sys_project t1 ON t.projectid = t1.projectid
+        <where>
+            <if test="projectid!=null">
+                t.projectid = #{projectid}
+            </if>
+            <if test="subsystemname!=null and subsystemname!=''">
+                AND t.subsystemname LIKE CONCAT('%', #{subsystemname}, '%')
+            </if>
+            <if test="delflag!=null and delflag!=''">
+                AND t.delflag = #{delflag}
+            </if>
+        </where>
+    </select>
+    
+    <select id="checkSubSystem" parameterType="SubSystem" resultType="int">
+        SELECT COUNT(t.subsystemid) FROM t_sys_subsystem t
+        <where>
+            <if test='subsystemid!=null'>
+                t.subsystemid != #{subsystemid}
+            </if>
+            <if test='delflag!=null and delflag!=""'>
+                AND t.delflag = #{delflag}
+            </if>
+            AND
+            ((t.projectid = #{projectid}
+                AND t.subsystemname = #{subsystemname})
+            OR t.type = #{type})
+        </where>
+    </select>
+
+</mapper>
